@@ -7,6 +7,7 @@
 engine.name = 'PolyPerc'
 MusicUtil = require 'musicutil'
 m = midi.connect()
+s = require 'sequins'
 
 function scale(scale_type) 
   return MusicUtil.generate_scale_of_length(0, scale_type, 127)
