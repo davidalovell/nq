@@ -23,15 +23,16 @@ function init()
 end
 
 m.event = function(data)
+
   local d = midi.to_msg(data)
 
   if d.type == 'note_on' then
     m:note_on(note(d.note, userscale), d.vel)
-    m:note_on(note(d.note + ((3/7)*12), userscale), d.vel)
+    m:note_on(note(d.note + 4, userscale), d.vel)
   end
 
   if d.type == 'note_off' then
     m:note_off(note(d.note, userscale), d.vel)
-    m:note_off(note(d.note + ((3/7)*12), userscale), d.vel)
+    m:note_off(note(d.note + 4, userscale), d.vel)
   end
 end
