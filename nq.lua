@@ -4,35 +4,24 @@
 -- send it to norns for quantising and scale management
 -- send it back
 
+
+
 engine.name = 'PolyPerc'
 MusicUtil = require 'musicutil'
 m = midi.connect()
 s = require 'sequins'
 
-function scale(scale_type) 
+function scale(scale_type, transpose)
   return MusicUtil.generate_scale_of_length(0, scale_type, 127)
 end
 
-function note(note_num, snap_array)
+function snap(note_num, snap_array)
   return MusicUtil.snap_note_to_array(note_num, snap_array)
 end
 
-userscale = scale('ionian')
-
-function init()
-end
-
 m.event = function(data)
-
-  local d = midi.to_msg(data)
-
-  if d.type == 'note_on' then
-    m:note_on(note(d.note, userscale), d.vel)
-    m:note_on(note(d.note + 4, userscale), d.vel)
-  end
-
-  if d.type == 'note_off' then
-    m:note_off(note(d.note, userscale), d.vel)
-    m:note_off(note(d.note + 4, userscale), d.vel)
-  end
+  local msg = midi.to_msg(data)
+  msg.note = snap(msg.note, scale('lydian'))
+  local data = midi.to_data(msg)
+  m:send(data)
 end
